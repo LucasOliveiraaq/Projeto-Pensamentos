@@ -18,11 +18,21 @@
         <ul>
             <li><a href="/">Pensamentos</a></li>
             <!--Urls após autenticação-->
+            {{#if session.userid}}
+            <li><a href="/tougths/dashboard">Dashboard</a></li>
+            <li><a href="/logout">Sair</a></li>
+            {{else}}
             <li><a href="/Login">Entrar</a></li>
             <li><a href="/Register">Registrar</a></li>
+            {{/if}}
         </ul>
     </nav>
     <div class="container">
+        {{#if messages.message}}
+        <div class="message">
+            {{messages.message}}
+        </div>
+        {{/if}}
         {{{body}}}
     </div>
     <footer>
