@@ -8,6 +8,8 @@ class Messages {
     static flashMessageUsuario = "Usuário não encontrado!";
     static flashMessageSenhaInvalida = "Senha inválida!";
     static flashMessageAutenticacao = "Autenticação realizada com sucesso!";
+    static flashMessagePensamentoCriadoComSucesso = "Pensamento criado com sucesso!";
+    static flashMessagePensamentoRemovidoComSucesso = "Pensamento removido com sucesso!";
 }
 
 module.exports = Messages;
