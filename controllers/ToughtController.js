@@ -7,8 +7,9 @@ module.exports = class ToughtsController {
         res.render('toughts/home');
     }
 
-    static async dashboard(req, res) {        
+    static async dashboard(req, res) {
         const userId = req.session.userid
+        console.log(userId);
 
         const user = await User.findOne({
             where: {
@@ -18,20 +19,26 @@ module.exports = class ToughtsController {
                 Retorna todos os pensamentos relacionado a esse usuario.
                 não precisa fazer uma nova query para buscar os pensamentos.
             */
-            include: Tought, 
+            include: Tought,
             plain: true,
         });
         if (!user) {
             req.flash('message', messages.flashMessageUsuario);
             res.redirect('/login');
         }
-        
+
         /*
             Filtrando para o retorno dele ser só oque está dentro do dataValues.
         */
         const toughts = user.Toughts.map((result) => result.dataValues);
-        
-        res.render('toughts/dashboard', {toughts});
+
+        let emptyToughts = false;
+
+        if (toughts.length === 0) {
+            emptyToughts = true;
+        }
+
+        res.render('toughts/dashboard', { toughts, emptyToughts });
     }
 
     static createTought(req, res) {
@@ -69,12 +76,34 @@ module.exports = class ToughtsController {
         }
     }
 
-    static async removeTought(req, res){
+    static async removeTought(req, res) {
         const id = req.body.id;
         const userId = req.session.userid;
         try {
-            await Tought.destroy({where: {id: id, UserId: userId}})
+            await Tought.destroy({ where: { id: id, UserId: userId } })
             req.flash('message', messages.flashMessagePensamentoRemovidoComSucesso);
+            req.session.save(() => {
+                res.redirect('/tougths/dashboard');
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    static async editTought(req, res) {
+        const id = req.params.id;
+        const tought = await Tought.findOne({ where: { id: id }, raw: true })
+        res.render('toughts/edit', { tought })
+    }
+
+    static async editToughtPost(req, res) {
+        const id = req.body.id;
+        const tought = {
+            title: req.body.title,
+        };
+        try {
+            await Tought.update(tought, { where: { id: id } });
+            req.flash('message', messages.flashMessagePensamentoAtualizadoComSucesso);
             req.session.save(() => {
                 res.redirect('/tougths/dashboard');
             })

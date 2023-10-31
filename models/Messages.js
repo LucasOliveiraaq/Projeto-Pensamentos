@@ -10,6 +10,7 @@ class Messages {
     static flashMessageAutenticacao = "Autenticação realizada com sucesso!";
     static flashMessagePensamentoCriadoComSucesso = "Pensamento criado com sucesso!";
     static flashMessagePensamentoRemovidoComSucesso = "Pensamento removido com sucesso!";
+    static flashMessagePensamentoAtualizadoComSucesso = "Pensamento atualizado com sucesso!"
 }
 
 module.exports = Messages;
